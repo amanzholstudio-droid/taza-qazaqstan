@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Таза Қазақстан — менің жауапкершілігім</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800&family=Noto+Sans:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#0E2416; --bg2:#163A24; --dk:#14301F; --lt:#F4F1E8; --lt2:#E7EFE6; --card:#FFFDF7;
+  --gr:#2E7D4F; --gr2:#4FB173; --gold:#E0B84C; --body:#3D4A42; --muted:#BFD3C4; --line:#DDD8C8;
+  --head:'Montserrat','Segoe UI',Arial,sans-serif; --txt:'Noto Sans','Segoe UI',Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--txt);color:var(--lt);user-select:none}
+body{background:radial-gradient(ellipse at 50% 40%, #1B4A2E 0%, var(--bg) 70%)}
+#leaves{position:fixed;inset:0;pointer-events:none;z-index:0}
+#stage{position:fixed;inset:0;overflow:hidden;z-index:1;cursor:pointer}
+#world{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform}
+#road{position:absolute;left:0;top:0;overflow:visible;pointer-events:none}
+#road .base{fill:none;stroke:rgba(244,241,232,.07);stroke-width:14;stroke-linecap:round;stroke-dasharray:2 34}
+#road .seg{fill:none;stroke:var(--gold);stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset 1.6s cubic-bezier(.65,0,.35,1) .2s;filter:drop-shadow(0 0 18px rgba(224,184,76,.55))}
+.dots{position:absolute;left:0;top:0;width:9600px;height:6800px;background-image:radial-gradient(rgba(244,241,232,.06) 2px,transparent 2px);background-size:80px 80px}
+
+.frame{position:absolute;width:1600px;height:900px;border-radius:44px;padding:84px 96px;transition:opacity .8s, box-shadow .8s, filter .8s;opacity:.38;filter:saturate(.6)}
+.frame.cur,.ov .frame{opacity:1;filter:none}
+.frame.light{background:var(--lt);color:var(--dk);box-shadow:0 40px 120px rgba(0,0,0,.45)}
+.frame.mint{background:var(--lt2);color:var(--dk);box-shadow:0 40px 120px rgba(0,0,0,.45)}
+.frame.dark{background:linear-gradient(145deg,#173B26,#10291A);color:var(--lt);border:2px solid rgba(224,184,76,.25);box-shadow:0 40px 120px rgba(0,0,0,.5)}
+.frame.green{background:linear-gradient(135deg,#2E7D4F,#1F5C39);color:var(--lt);box-shadow:0 40px 140px rgba(0,0,0,.5)}
+.frame.cur{box-shadow:0 0 0 6px rgba(224,184,76,.6),0 40px 140px rgba(0,0,0,.55)}
+
+.eyebrow{font-family:var(--head);font-weight:700;font-size:26px;letter-spacing:6px;text-transform:uppercase;color:var(--gr)}
+.dark .eyebrow,.green .eyebrow{color:var(--gold)}
+h2{font-family:var(--head);font-weight:800;font-size:70px;line-height:1.08;margin-top:14px}
+.lead{font-size:30px;line-height:1.45;color:var(--body);margin-top:22px;max-width:1300px}
+.dark .lead{color:var(--muted)}
+.src{position:absolute;left:96px;bottom:40px;font-size:20px;opacity:.65}
+.ico{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(40px) scale(.96);transition:opacity .7s ease, transform .9s cubic-bezier(.2,.8,.2,1.15);transition-delay:calc(var(--i,0) * 140ms + 500ms)}
+.seen .rv{opacity:1;transform:none}
+.pop{opacity:0;transform:scale(.3) rotate(-25deg);transition:opacity .5s, transform .8s cubic-bezier(.3,1.6,.5,1);transition-delay:calc(var(--i,0) * 140ms + 600ms)}
+.seen .pop{opacity:1;transform:none}
+
+/* title */
+#f-title{padding:0;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding-left:120px;overflow:hidden}
+#f-title h1{font-family:var(--head);font-weight:800;font-size:104px;line-height:1.04;position:relative;z-index:2}
+#f-title h1 span{color:var(--gold)}
+#f-title .sub{font-size:34px;color:var(--muted);margin-top:34px;position:relative;z-index:2;max-width:1000px}
+#f-title .who{position:absolute;left:120px;bottom:56px;font-size:24px;color:var(--muted);z-index:2}
+#f-title .hint{position:absolute;right:70px;bottom:52px;font-size:24px;color:var(--gold);z-index:2;animation:nudge 1.6s ease-in-out infinite}
+@keyframes nudge{50%{transform:translateX(12px)}}
+.globe{position:absolute;right:-180px;top:-160px;width:820px;height:820px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#2E7D4F,#173B26 70%);opacity:.9}
+.globe::after{content:"";position:absolute;inset:60px;border-radius:50%;border:3px dashed rgba(224,184,76,.35);animation:spin 60s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.bigleaf{position:absolute;right:120px;top:150px;width:360px;height:360px;color:var(--gold);z-index:1;animation:sway 5s ease-in-out infinite;transform-origin:20% 90%}
+@keyframes sway{50%{transform:rotate(-8deg)}}
+
+/* about timeline */
+.tl{position:relative;display:flex;gap:56px;margin-top:80px}
+.tl .ln{position:absolute;left:40px;right:40px;top:58px;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.tl .ln i{display:block;height:100%;width:0;background:var(--gr);transition:width 1.8s cubic-bezier(.65,0,.35,1) .6s}
+.seen .tl .ln i{width:100%}
+.tl .st{flex:1;position:relative}
+.tl .dot{width:120px;height:120px;border-radius:50%;background:var(--gr);color:var(--lt);display:flex;align-items:center;justify-content:center;font-family:var(--head);font-weight:800;font-size:28px;box-shadow:0 0 0 12px var(--lt)}
+.tl .dot.g{background:var(--dk);color:var(--gold);font-size:64px}
+.tl .y{font-family:var(--head);font-weight:800;font-size:58px;color:var(--gr);margin-top:34px}
+.tl p{font-size:28px;line-height:1.45;color:var(--body);margin-top:12px}
+
+/* directions */
+.dirs{display:grid;grid-template-columns:repeat(5,1fr);gap:28px;margin-top:70px}
+.dir{background:var(--card);border:2px solid var(--line);border-radius:32px;padding:40px 30px;min-height:470px}
+.dir .ic{width:120px;height:120px;border-radius:50%;background:var(--gr);color:var(--lt);padding:28px}
+.dir h3{font-family:var(--head);font-weight:800;font-size:32px;margin-top:30px}
+.dir p{font-size:24px;line-height:1.45;color:var(--body);margin-top:14px}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:56px}
+.stat{background:rgba(255,255,255,.05);border:2px solid rgba(244,241,232,.1);border-radius:30px;padding:34px 38px;display:flex;gap:26px;align-items:center}
+.stat .ic{flex:none;width:86px;height:86px;border-radius:24px;background:rgba(224,184,76,.15);color:var(--gold);padding:20px}
+.num{font-family:var(--head);font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.stat .num{font-size:66px;color:var(--gold);line-height:1}
+.stat p{font-size:24px;color:var(--lt);margin-top:10px}
+
+/* cleanup */
+.cu{display:flex;gap:40px;margin-top:50px;align-items:stretch}
+.cu .big{flex:1.15;background:var(--gr);color:var(--lt);border-radius:36px;padding:46px;position:relative;overflow:hidden}
+.cu .big .num{font-size:118px;line-height:1}
+.cu .big p{font-size:30px;margin-top:10px}
+.pulse{position:absolute;right:-60px;bottom:-60px;width:300px;height:300px;border-radius:50%;border:4px solid rgba(244,241,232,.3)}
+.seen .pulse{animation:pulse 2.6s ease-out infinite}
+.pulse.b{animation-delay:1.3s!important}
+@keyframes pulse{from{transform:scale(.4);opacity:1}to{transform:scale(1.6);opacity:0}}
+.split{display:flex;gap:16px;margin-top:40px}
+.split div{background:rgba(244,241,232,.14);border-radius:20px;padding:20px 24px;font-size:23px;line-height:1.35}
+.split b{display:block;font-family:var(--head);font-size:40px}
+.cu .side{flex:1;display:grid;grid-template-rows:repeat(3,1fr);gap:24px}
+.cu .side .c{background:var(--card);border-radius:28px;padding:26px 36px;display:flex;align-items:center;gap:28px}
+.cu .side .ic{width:76px;height:76px;flex:none;color:var(--gr)}
+.cu .side .num{font-size:60px;color:var(--gr)}
+.cu .side p{font-size:24px;color:var(--body)}
+
+/* waste */
+.ws{display:flex;gap:40px;margin-top:46px}
+.wc{flex:1;background:var(--card);border:2px solid var(--line);border-radius:36px;padding:40px 46px;display:flex;gap:40px;align-items:center}
+.ring{position:relative;width:300px;height:300px;flex:none}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring .tr{fill:none;stroke:#E3DED0;stroke-width:26}
+.ring .pr{fill:none;stroke:var(--gr);stroke-width:26;stroke-linecap:round;stroke-dasharray:565.5;stroke-dashoffset:565.5;transition:stroke-dashoffset 2s cubic-bezier(.65,0,.35,1) .8s}
+.ring .pr.warn{stroke:#C9862E}
+.ring .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring .num{font-size:66px;color:var(--dk)}
+.ring small{font-size:22px;color:var(--body)}
+.wc h3{font-family:var(--head);font-weight:800;font-size:34px}
+.wc .num.k{font-size:64px;color:var(--gr);margin-top:12px;display:block}
+.wc p{font-size:24px;line-height:1.45;color:var(--body);margin-top:8px}
+
+/* bot */
+.flow{display:flex;align-items:center;gap:0;margin-top:56px}
+.fs{width:300px;background:rgba(255,255,255,.05);border:2px solid rgba(244,241,232,.12);border-radius:30px;padding:30px;text-align:center}
+.fs .ic{width:110px;height:110px;margin:0 auto;border-radius:50%;background:rgba(224,184,76,.15);color:var(--gold);padding:26px}
+.fs h3{font-family:var(--head);font-weight:800;font-size:30px;margin-top:20px}
+.fs p{font-size:22px;color:var(--muted);margin-top:10px;line-height:1.4}
+.arr{flex:1;height:8px;margin:0 6px;background:repeating-linear-gradient(90deg,var(--gold) 0 18px,transparent 18px 34px);background-size:34px 8px;opacity:.7}
+.seen .arr{animation:flowx .8s linear infinite}
+@keyframes flowx{to{background-position:34px 0}}
+.botbar{margin-top:56px}
+.botbar .row{display:flex;justify-content:space-between;align-items:baseline}
+.botbar .num{font-size:64px;color:var(--gold)}
+.botbar .lbl{font-size:26px;color:var(--muted)}
+.track{height:34px;border-radius:17px;background:rgba(244,241,232,.12);margin-top:18px;overflow:hidden}
+.track i{display:block;height:100%;width:0;border-radius:17px;background:linear-gradient(90deg,var(--gr2),var(--gold));transition:width 2.2s cubic-bezier(.65,0,.35,1) 1s}
+
+/* education */
+.edu{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:64px}
+.ed{background:var(--card);border-radius:34px;padding:44px;position:relative;overflow:hidden}
+.ed .ic{width:96px;height:96px;color:var(--gr)}
+.ed .num{font-size:84px;color:var(--gr);margin-top:20px;display:block}
+.ed h3{font-family:var(--head);font-weight:800;font-size:32px;margin-top:8px}
+.ed p{font-size:24px;line-height:1.45;color:var(--body);margin-top:10px}
+
+/* habits */
+.hb{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:56px}
+.h{background:var(--card);border:2px solid var(--line);border-radius:28px;padding:30px 34px;display:flex;gap:24px;align-items:flex-start}
+.h .ck{width:66px;height:66px;flex:none;border-radius:50%;background:var(--line);color:var(--lt);padding:14px;transition:background .4s;transition-delay:calc(var(--i,0) * 140ms + 900ms)}
+.seen .h .ck{background:var(--gr)}
+.h .ck path{stroke-dasharray:30;stroke-dashoffset:30;transition:stroke-dashoffset .5s;transition-delay:calc(var(--i,0) * 140ms + 1100ms)}
+.seen .h .ck path{stroke-dashoffset:0}
+.h h3{font-family:var(--head);font-weight:800;font-size:30px;line-height:1.15}
+.h p{font-size:23px;line-height:1.4;color:var(--body);margin-top:10px}
+
+/* finale */
+#f-final{display:flex;flex-direction:column;justify-content:center;padding-left:120px;overflow:hidden}
+#f-final h2{font-size:110px}
+#f-final .lead{color:var(--lt);font-size:38px}
+#f-final .thx{font-family:var(--head);font-weight:800;font-size:46px;color:#F2D27A;margin-top:46px}
+#f-final .src{left:120px}
+.sprout{position:absolute;right:110px;bottom:70px;width:340px;height:420px;color:var(--gold)}
+.sprout path{stroke-dasharray:600;stroke-dashoffset:600;transition:stroke-dashoffset 2.4s ease .6s}
+.seen .sprout path{stroke-dashoffset:0}
+
+/* fixes */
+.cu .side .c>svg{width:76px;height:76px;flex:none;color:var(--gr)}
+.ed>svg{width:96px;height:96px;color:var(--gr);display:block}
+.cu .big .split b.num{font-size:40px;line-height:1.1}
+.stat .num{font-size:54px}
+#f-final .lead{max-width:950px}
+.ed .num{font-size:68px}
+.edu{grid-template-columns:repeat(3,minmax(0,1fr))}
+#f-final h2,#f-final .thx{position:relative;z-index:2}
+
+/* hud */
+#hud{position:fixed;left:0;right:0;bottom:0;z-index:5;height:6px;background:rgba(244,241,232,.08)}
+#hud i{display:block;height:100%;width:0;background:var(--gold);transition:width .8s}
+#nav{position:fixed;right:22px;bottom:22px;z-index:6;display:flex;gap:10px;align-items:center;font-family:var(--head);font-size:14px;color:var(--muted)}
+#nav button{width:44px;height:44px;border-radius:50%;border:1px solid rgba(244,241,232,.25);background:rgba(14,36,22,.7);color:var(--lt);font-size:20px;cursor:pointer}
+#nav button:hover{background:var(--gr)}
+#help{position:fixed;left:22px;bottom:22px;z-index:6;font-size:13px;color:rgba(191,211,196,.6)}
+</style>
+</head>
+<body>
+<canvas id="leaves"></canvas>
+<div id="stage"><div id="world">
+<div class="dots"></div>
+<svg id="road" width="9600" height="6800"></svg>
+
+<!-- TITLE -->
+<section class="frame green" id="f-title" data-x="4800" data-y="2950" data-r="0" data-s="1.5">
+  <div class="globe"></div>
+  <svg class="bigleaf ico" viewBox="0 0 24 24" style="stroke-width:1.2"><path d="M4 20C4 10 10 4 21 3c-1 11-7 17-17 17z"/><path d="M4 20 15 9"/><path d="M9 15h5M12 12V8"/></svg>
+  <div class="eyebrow" style="position:relative;z-index:2">Экологиялық мәдениет · 2026</div>
+  <h1 style="margin-top:22px">Таза Қазақстан —<br><span>менің</span> жауапкершілігім</h1>
+  <p class="sub">Туған жердің тазалығы мемлекеттен емес, әрқайсымыздан басталады</p>
+  <p class="who">Баяндамашы: [Аты-жөні] · [Ұйым / сынып]</p>
+  <p class="hint">Бастау → </p>
+</section>
+
+<!-- ABOUT -->
+<section class="frame light" id="f-about" data-x="2050" data-y="1250" data-r="-7" data-s="1">
+  <div class="eyebrow">Бастама туралы</div>
+  <h2>«Таза Қазақстан» дегеніміз не?</h2>
+  <div class="tl">
+    <div class="ln"><i></i></div>
+    <div class="st rv" style="--i:0"><div class="dot">2024</div><div class="y">Бастау</div><p>Мемлекет басшысы Қасым-Жомарт Тоқаевтың бастамасымен жалпыұлттық экологиялық акция басталды</p></div>
+    <div class="st rv" style="--i:3"><div class="dot">2029</div><div class="y">2024–2029</div><p>Экологиялық мәдениетті дамыту тұжырымдамасы: білім, жауапты мінез-құлық, ақпараттық жұмыс</p></div>
+    <div class="st rv" style="--i:6"><div class="dot g">∞</div><div class="y" style="color:var(--dk)">Үнемі</div><p>Бір реттік акция емес — тазалықты күнделікті әдетке айналдыратын тұрақты қозғалыс</p></div>
+  </div>
+</section>
+
+<!-- DIRECTIONS -->
+<section class="frame light" id="f-dirs" data-x="4650" data-y="700" data-r="5" data-s="1">
+  <div class="eyebrow">Негізгі бағыттар</div>
+  <h2>Бес бағыт — бір мақсат</h2>
+  <div class="dirs">
+    <div class="dir rv" style="--i:0"><div class="ic pop" style="--i:1"><svg class="ico" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14M10 10v6M14 10v6"/></svg></div><h3>Таза өлке</h3><p>Аулаларды, көшелер мен елді мекендерді қоқыстан тазарту</p></div>
+    <div class="dir rv" style="--i:1"><div class="ic pop" style="--i:2"><svg class="ico" viewBox="0 0 24 24"><path d="M12 2 6 11h4l-5 7h14l-5-7h4z"/><path d="M12 18v4"/></svg></div><h3>Жасыл аймақ</h3><p>Ағаш отырғызу, саябақтар мен скверлерді көгалдандыру</p></div>
+    <div class="dir rv" style="--i:2"><div class="ic pop" style="--i:3"><svg class="ico" viewBox="0 0 24 24"><path d="M3 10 12 4l9 6z"/><path d="M5 10v9M19 10v9M9.5 10v9M14.5 10v9M3 20h18"/></svg></div><h3>Киелі мекен</h3><p>Тарихи-мәдени ескерткіштер мен қасиетті жерлерді күтіп-баптау</p></div>
+    <div class="dir rv" style="--i:3"><div class="ic pop" style="--i:4"><svg class="ico" viewBox="0 0 24 24"><path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z"/><path d="M9 15a3 3 0 0 0 3 3"/></svg></div><h3>Мөлдір бұлақ</h3><p>Өзен, көл жағалаулары мен бұлақтарды тазалау</p></div>
+    <div class="dir rv" style="--i:4"><div class="ic pop" style="--i:5"><svg class="ico" viewBox="0 0 24 24"><circle cx="8" cy="7" r="3"/><circle cx="17" cy="9" r="2.3"/><path d="M2.5 20c0-4 2.5-6.5 5.5-6.5s5.5 2.5 5.5 6.5M14 20c0-3 1.3-5 3-5s3.5 2 3.5 5"/></svg></div><h3>Өнегелі ұрпақ</h3><p>Балалар мен жастарды табиғатқа қамқор болуға тәрбиелеу</p></div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section class="frame dark" id="f-res" data-x="7350" data-y="1300" data-r="-4" data-s="1.05">
+  <div class="eyebrow">2026 жылғы нәтижелер</div>
+  <h2>Сандар өзі сөйлейді</h2>
+  <div class="stats">
+    <div class="stat rv" style="--i:0"><div class="ic"><svg class="ico" viewBox="0 0 24 24"><circle cx="9" cy="7" r="3.5"/><path d="M2 21c0-4 3-7 7-7s7 3 7 7"/><path d="M16 4a3.5 3.5 0 0 1 0 7M18 14c2.5 1 4 3.5 4 7"/></svg></div><div><div class="num" data-to="6.9" data-dec="1" data-suf=" млн">0</div><p>адам іс-шараларға қатысты</p></div></div>
+    <div class="stat rv" style="--i:1"><div class="ic"><svg class="ico" viewBox="0 0 24 24"><path d="M12 21s-8-5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6-8 11-8 11z"/></svg></div><div><div class="num" data-to="985" data-suf=" мың">0</div><p>ерікті атсалысты</p></div></div>
+    <div class="stat rv" style="--i:2"><div class="ic"><svg class="ico" viewBox="0 0 24 24"><path d="M3 20 9 6l4 8 3-5 5 11z"/></svg></div><div><div class="num" data-to="1.1" data-dec="1" data-suf=" млн">0</div><p>гектар аумақ тазартылды</p></div></div>
+    <div class="stat rv" style="--i:3"><div class="ic"><svg class="ico" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg></div><div><div class="num" data-to="844" data-suf=" мың">0</div><p>тонна қалдық шығарылды</p></div></div>
+    <div class="stat rv" style="--i:4"><div class="ic"><svg class="ico" viewBox="0 0 24 24"><path d="M12 2 6 11h4l-5 7h14l-5-7h4z"/><path d="M12 18v4"/></svg></div><div><div class="num" data-to="1.3" data-dec="1" data-suf=" млн+">0</div><p>ағаш отырғызылды</p></div></div>
+    <div class="stat rv" style="--i:5"><div class="ic"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M7 9h10M7 13h6M9 21h6"/></svg></div><div><div class="num" data-to="183" data-suf=" мың+">0</div><p>БАҚ материалы жарияланды</p></div></div>
+  </div>
+  <p class="src">Дереккөз: ҚР Экология және табиғи ресурстар министрлігі, 24.kz, 22.10.2026</p>
+</section>
+
+<!-- CLEANUP -->
+<section class="frame mint" id="f-clean" data-x="8000" data-y="3500" data-r="6" data-s="1">
+  <div class="eyebrow">19 қыркүйек 2026 · World Cleanup Day</div>
+  <h2>Бір күнде — бүкіл ел</h2>
+  <div class="cu">
+    <div class="big rv" style="--i:0">
+      <div class="pulse"></div><div class="pulse b"></div>
+      <div class="num" data-to="513" data-suf=" мың+">0</div>
+      <p>адам бір күнде тазалыққа шықты</p>
+      <div class="split">
+        <div><b class="num" data-to="140" data-suf=" мың+">0</b>мемлекеттік қызметкер</div>
+        <div><b class="num" data-to="82" data-pre="≈" data-suf=" мың">0</b>ерікті</div>
+      </div>
+    </div>
+    <div class="side">
+      <div class="c rv" style="--i:2"><svg class="ico" viewBox="0 0 24 24"><path d="M3 20 9 6l4 8 3-5 5 11z"/></svg><div><div class="num" data-to="6" data-pre="≈" data-suf=" мың">0</div><p>гектар тазаланды</p></div></div>
+      <div class="c rv" style="--i:3"><svg class="ico" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg><div><div class="num" data-to="12" data-suf=" мың+">0</div><p>тонна қалдық шығарылды</p></div></div>
+      <div class="c rv" style="--i:4"><svg class="ico" viewBox="0 0 24 24"><path d="M12 2 6 11h4l-5 7h14l-5-7h4z"/><path d="M12 18v4"/></svg><div><div class="num" data-to="38" data-suf=" мың+">0</div><p>ағаш пен бұта отырғызылды</p></div></div>
+    </div>
+  </div>
+  <p class="src" style="color:var(--body)">Дереккөз: ҚР ЭТРМ, 24.kz, 22.10.2026</p>
+</section>
+
+<!-- WASTE -->
+<section class="frame light" id="f-waste" data-x="7050" data-y="5650" data-r="-5" data-s="1">
+  <div class="eyebrow">Мәселе</div>
+  <h2>Қоқыс өздігінен жоғалмайды</h2>
+  <div class="ws">
+    <div class="wc rv" style="--i:0">
+      <div class="ring"><svg viewBox="0 0 200 200"><circle class="tr" cx="100" cy="100" r="90"/><circle class="pr warn" data-p="0.258" cx="100" cy="100" r="90"/></svg>
+        <div class="c"><div class="num" data-to="25.8" data-dec="1" data-suf="%">0</div><small>қайта өңделеді</small></div></div>
+      <div><h3>Тұрмыстық қалдық</h3><span class="num k" data-to="4.5" data-dec="1" data-suf=" млн т+">0</span><p>жыл сайын пайда болады — оның тек төрттен бірі ғана қайта өңделеді (2024)</p></div>
+    </div>
+    <div class="wc rv" style="--i:2">
+      <div class="ring"><svg viewBox="0 0 200 200"><circle class="tr" cx="100" cy="100" r="90"/><circle class="pr" data-p="0.83" cx="100" cy="100" r="90"/></svg>
+        <div class="c"><div class="num" data-to="83" data-suf="%">0</div><small>жойылды</small></div></div>
+      <div><h3>Заңсыз үйінділер</h3><span class="num k" data-to="2637">0</span><p>үйінді ғарыштан анықталды, оның 2 192-сі тазартылды</p></div>
+    </div>
+  </div>
+  <p class="src" style="color:var(--body)">Дереккөздер: The Astana Times, 27.08.2025; 24.kz, 22.10.2026</p>
+</section>
+
+<!-- BOT -->
+<section class="frame dark" id="f-bot" data-x="4500" data-y="5900" data-r="4" data-s="1">
+  <div class="eyebrow">Цифрлық құрал</div>
+  <h2>@TazaQazBot — дауысың естіледі</h2>
+  <div class="flow">
+    <div class="fs rv" style="--i:0"><div class="ic"><svg class="ico" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg></div><h3>Суретке түсір</h3><p>Фото + геолокация</p></div>
+    <div class="arr rv" style="--i:1"></div>
+    <div class="fs rv" style="--i:2"><div class="ic"><svg class="ico" viewBox="0 0 24 24"><path d="M21 3 3 10l7 3 3 7z"/><path d="M10 13 21 3"/></svg></div><h3>Өтініш жібер</h3><p>Жауапты органға жолданады</p></div>
+    <div class="arr rv" style="--i:3"></div>
+    <div class="fs rv" style="--i:4"><div class="ic"><svg class="ico" viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></div><h3>Нәтижені көр</h3><p>Мәртебе + фотоесеп</p></div>
+  </div>
+  <div class="botbar rv" style="--i:5">
+    <div class="row"><div><span class="num" data-to="56291">0</span> <span class="lbl">/ 60 827 өтініш орындалды</span></div><div class="num" data-to="92.5" data-dec="1" data-suf="%" style="font-size:48px">0</div></div>
+    <div class="track"><i data-w="92.5"></i></div>
+  </div>
+  <p class="src">Дереккөз: 24.kz, 22.10.2026 (бот іске қосылғаннан бергі дерек)</p>
+</section>
+
+<!-- EDUCATION -->
+<section class="frame mint" id="f-edu" data-x="1950" data-y="5400" data-r="-5" data-s="1">
+  <div class="eyebrow">Экологиялық тәрбие</div>
+  <h2>Тазалық балабақшадан басталады</h2>
+  <div class="edu">
+    <div class="ed rv" style="--i:0"><svg class="ico" viewBox="0 0 24 24"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/><path d="M12 20v-5M9.5 15.5c0-2 1-3 2.5-3.5 1.5.5 2.5 1.5 2.5 3.5"/></svg><span class="num" data-to="295">0</span><h3>«Жасыл балабақша»</h3><p>экологиялық бағыттағы мектепке дейінгі ұйым</p></div>
+    <div class="ed rv" style="--i:1"><svg class="ico" viewBox="0 0 24 24"><path d="M2 8 12 4l10 4-10 4z"/><path d="M6 10v5c3 2 9 2 12 0v-5M22 8v6"/></svg><span class="num" data-to="1748">0</span><h3>Педагог</h3><p>экологиялық тәрбие бағдарламасы бойынша оқытылды</p></div>
+    <div class="ed rv" style="--i:2"><svg class="ico" viewBox="0 0 24 24"><path d="M4 5h7v14H4zM13 5h7v14h-7z"/></svg><span class="num" data-to="158" data-suf=" мың+">0</span><h3>Сынып сағаты</h3><p>мектептерде экологияға арналып өткізілді</p></div>
+  </div>
+  <p class="src" style="color:var(--body)">Дереккөз: 24.kz, 22.10.2026</p>
+</section>
+
+<!-- HABITS -->
+<section class="frame light" id="f-hab" data-x="1300" data-y="3250" data-r="6" data-s="1">
+  <div class="eyebrow">Менің жауапкершілігім</div>
+  <h2>Мен бүгіннен не істей аламын?</h2>
+  <div class="hb">
+    <div class="h rv" style="--i:0"><div class="ck"><svg class="ico" viewBox="0 0 24 24" style="stroke-width:3"><path d="M5 12l5 5 9-10"/></svg></div><div><h3>Қоқысты лақтырмаймын</h3><p>Көшеде, табиғатта — тек қоқыс жәшігіне</p></div></div>
+    <div class="h rv" style="--i:1"><div class="ck"><svg class="ico" viewBox="0 0 24 24" style="stroke-width:3"><path d="M5 12l5 5 9-10"/></svg></div><div><h3>Сұрыптаймын</h3><p>Пластик, қағаз, шыны — бөлек контейнерге</p></div></div>
+    <div class="h rv" style="--i:2"><div class="ck"><svg class="ico" viewBox="0 0 24 24" style="stroke-width:3"><path d="M5 12l5 5 9-10"/></svg></div><div><h3>Пластикті азайтамын</h3><p>Мата сөмке, қайта қолданылатын бөтелке</p></div></div>
+    <div class="h rv" style="--i:3"><div class="ck"><svg class="ico" viewBox="0 0 24 24" style="stroke-width:3"><path d="M5 12l5 5 9-10"/></svg></div><div><h3>Сенбілікке шығамын</h3><p>Аулама, мектебіме, қалама уақыт бөлемін</p></div></div>
+    <div class="h rv" style="--i:4"><div class="ck"><svg class="ico" viewBox="0 0 24 24" style="stroke-width:3"><path d="M5 12l5 5 9-10"/></svg></div><div><h3>Ағаш отырғызамын</h3><p>Жылына кемінде бір көшет — және оны күтемін</p></div></div>
+    <div class="h rv" style="--i:5"><div class="ck"><svg class="ico" viewBox="0 0 24 24" style="stroke-width:3"><path d="M5 12l5 5 9-10"/></svg></div><div><h3>Үнсіз қалмаймын</h3><p>Заңсыз үйіндіні TazaQazBot-қа хабарлаймын</p></div></div>
+  </div>
+</section>
+
+<!-- FINAL -->
+<section class="frame green" id="f-final" data-x="4800" data-y="3950" data-r="0" data-s="0.55">
+  <svg class="sprout ico" viewBox="0 0 24 30" style="stroke-width:1"><path d="M12 29V12"/><path d="M12 18C12 12 8 9 3 9c0 5 4 8 9 9z"/><path d="M12 13c0-6 4-9 9-9 0 6-4 9-9 9z"/><path d="M5 29h14"/></svg>
+  <h2 class="rv" style="--i:0">Таза Қазақстан<br>менен басталады.</h2>
+  <p class="lead rv" style="--i:2">Елдің тазалығы — әрқайсымыздың күнделікті таңдауымыз.</p>
+  <p class="thx rv" style="--i:4">Назарларыңызға рахмет!</p>
+  <p class="src">Дереккөздер: ҚР ЭТРМ / 24.kz (22.10.2026); The Astana Times (27.08.2025); akorda.kz</p>
+</section>
+</div></div>
+
+<div id="hud"><i></i></div>
+<div id="nav"><span id="cnt"></span><button id="prev" aria-label="Артқа">‹</button><button id="next" aria-label="Алға">›</button></div>
+<div id="help">← → / бос орын — ауысу · F — толық экран · O — жалпы көрініс</div>
+
+<script>
+(function(){
+const world=document.getElementById('world'), stage=document.getElementById('stage');
+const F=id=>document.getElementById(id);
+const frames=[...document.querySelectorAll('.frame')];
+frames.forEach(f=>{
+  const x=+f.dataset.x,y=+f.dataset.y,r=+f.dataset.r,s=+f.dataset.s;
+  f.style.left=(x-800)+'px'; f.style.top=(y-450)+'px';
+  f.style.transform=`rotate(${r}deg) scale(${s})`;
+});
+const order=['f-title','f-about','f-dirs','f-res','f-clean','f-waste','f-bot','f-edu','f-hab','f-final'];
+const OV={x:4700,y:3350,w:9000,h:6300,r:0,ov:true};
+const cam=id=>{const f=F(id);return {x:+f.dataset.x,y:+f.dataset.y,w:1600*f.dataset.s,h:900*f.dataset.s,r:+f.dataset.r,id}};
+const steps=[cam('f-title'),OV,...order.slice(1).map(cam),Object.assign({},OV,{end:true})];
+
+// road
+const road=document.getElementById('road'); const NS='http://www.w3.org/2000/svg';
+const pts=order.map(id=>{const f=F(id);return [+f.dataset.x,+f.dataset.y]});
+const segs=[];
+for(let i=0;i<pts.length-1;i++){
+  const [x1,y1]=pts[i],[x2,y2]=pts[i+1];const mx=(x1+x2)/2,my=(y1+y2)/2;const dx=x2-x1,dy=y2-y1;
+  const k=(i%2?1:-1)*0.22;const cx=mx-dy*k,cy=my+dx*k;const d=`M${x1} ${y1} Q${cx} ${cy} ${x2} ${y2}`;
+  const b=document.createElementNS(NS,'path');b.setAttribute('d',d);b.setAttribute('class','base');road.appendChild(b);
+  const p=document.createElementNS(NS,'path');p.setAttribute('d',d);p.setAttribute('class','seg');road.appendChild(p);
+  const L=p.getTotalLength();p.style.strokeDasharray=L;p.style.strokeDashoffset=L;segs.push(p);
+}
+
+// numbers
+const fmt=(v,dec)=>{let s=v.toFixed(dec);let [a,b]=s.split('.');a=a.replace(/\B(?=(\d{3})+(?!\d))/g,' ');return b?a+','+b:a};
+function countUp(el,delay){
+  const to=+el.dataset.to,dec=+(el.dataset.dec||0),pre=el.dataset.pre||'',suf=el.dataset.suf||'';
+  const dur=1800;let t0=null;
+  setTimeout(()=>{requestAnimationFrame(function tick(t){if(!t0)t0=t;const p=Math.min(1,(t-t0)/dur);const e=1-Math.pow(1-p,4);
+    el.textContent=pre+fmt(to*e,dec)+suf;if(p<1)requestAnimationFrame(tick)})},delay);
+}
+function setFinal(el){const dec=+(el.dataset.dec||0);el.textContent=(el.dataset.pre||'')+fmt(+el.dataset.to,dec)+(el.dataset.suf||'')}
+function reveal(f){
+  if(f.classList.contains('seen'))return;f.classList.add('seen');
+  f.querySelectorAll('.num[data-to]').forEach(el=>{const host=el.closest('[style*="--i"]');const i=host?+getComputedStyle(host).getPropertyValue('--i')||0:0;countUp(el,600+i*140)});
+  f.querySelectorAll('.pr').forEach(c=>{c.style.strokeDashoffset=565.5*(1-c.dataset.p)});
+  f.querySelectorAll('.track i').forEach(b=>{b.style.width=b.dataset.w+'%'});
+}
+function revealAllInstant(){frames.forEach(f=>{if(!f.classList.contains('seen')){f.classList.add('seen');f.querySelectorAll('.num[data-to]').forEach(setFinal);f.querySelectorAll('.pr').forEach(c=>c.style.strokeDashoffset=565.5*(1-c.dataset.p));f.querySelectorAll('.track i').forEach(b=>b.style.width=b.dataset.w+'%')}});segs.forEach(s=>s.style.strokeDashoffset=0)}
+
+// camera
+let curCam={x:OV.x,y:OV.y,w:OV.w,h:OV.h,r:0}, idx=0, anim=null;
+const fitS=c=>Math.min(innerWidth/c.w,innerHeight/c.h)*0.92;
+function apply(c){const s=fitS(c);world.style.transform=`translate(${innerWidth/2}px,${innerHeight/2}px) scale(${s}) rotate(${-c.r}deg) translate(${-c.x}px,${-c.y}px)`}
+const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+function fly(to,dur){
+  if(anim)cancelAnimationFrame(anim);
+  const from={...curCam};const s0=Math.log(fitS(from)),s1=Math.log(fitS(to));
+  const dist=Math.hypot(to.x-from.x,to.y-from.y);
+  const bump=Math.min(1.1,dist/3500)*(from.ov||to.ov?0.15:1);
+  const D=dur||Math.min(2200,1100+dist*0.25);let t0=null;
+  function tick(t){if(!t0)t0=t;const p=Math.min(1,(t-t0)/D),e=ease(p);
+    const ls=s0+(s1-s0)*e-bump*Math.sin(Math.PI*e);const s=Math.exp(ls);
+    const c={x:from.x+(to.x-from.x)*e,y:from.y+(to.y-from.y)*e,r:from.r+(to.r-from.r)*e};
+    world.style.transform=`translate(${innerWidth/2}px,${innerHeight/2}px) scale(${s}) rotate(${-c.r}deg) translate(${-c.x}px,${-c.y}px)`;
+    if(p<1)anim=requestAnimationFrame(tick);else{curCam={...to};anim=null}}
+  anim=requestAnimationFrame(tick);
+}
+function go(i,instant){
+  i=Math.max(0,Math.min(steps.length-1,i));const st=steps[i];idx=i;
+  document.body.classList.toggle('ov',!!st.ov);stage.classList.toggle('ov',!!st.ov);
+  world.classList.toggle('ov',!!st.ov);
+  frames.forEach(f=>f.classList.toggle('cur',f.id===st.id));
+  if(st.id){const f=F(st.id);setTimeout(()=>reveal(f),instant?0:700);
+    const k=order.indexOf(st.id);for(let j=0;j<k;j++)segs[j].style.strokeDashoffset=0;}
+  if(st.end)setTimeout(revealAllInstant,400);
+  if(instant){curCam={...st};apply(st)}else fly(st);
+  document.querySelector('#hud i').style.width=(i/(steps.length-1)*100)+'%';
+  document.getElementById('cnt').textContent=(i+1)+' / '+steps.length;
+}
+// overview class handling for frames
+const css=document.createElement('style');css.textContent='.ov .frame{opacity:1;filter:none}';document.head.appendChild(css);
+
+addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown','PageDown',' ','Enter'].includes(e.key)){e.preventDefault();go(idx+1)}
+  else if(['ArrowLeft','ArrowUp','PageUp','Backspace'].includes(e.key)){e.preventDefault();go(idx-1)}
+  else if(e.key==='Home')go(0);else if(e.key==='End')go(steps.length-1);
+  else if(e.key==='f'||e.key==='F'||e.key==='а'||e.key==='А'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen().catch(()=>{})}
+  else if(e.key==='o'||e.key==='O'||e.key==='щ'||e.key==='Щ'){fly(OV);document.body.classList.add('ov');world.classList.add('ov')}
+});
+stage.addEventListener('click',e=>{
+  if(world.classList.contains('ov')&&!steps[idx].end&&idx!==1){}
+  const fr=e.target.closest('.frame');
+  if(steps[idx].ov&&fr&&order.includes(fr.id)){const j=steps.findIndex(s=>s.id===fr.id);if(j>=0){go(j);return}}
+  go(idx+1);
+});
+document.getElementById('next').onclick=e=>{e.stopPropagation();go(idx+1)};
+document.getElementById('prev').onclick=e=>{e.stopPropagation();go(idx-1)};
+addEventListener('resize',()=>{if(!anim)apply(curCam)});
+let wheelLock=0;addEventListener('wheel',e=>{const n=Date.now();if(n-wheelLock<900)return;wheelLock=n;go(idx+(e.deltaY>0?1:-1))},{passive:true});
+let tx=null;addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});
+addEventListener('touchend',e=>{if(tx==null)return;const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>50)go(idx+(d<0?1:-1));tx=null},{passive:true});
+
+apply(OV);setTimeout(()=>go(0),150);
+
+// leaves
+const cv=document.getElementById('leaves'),cx=cv.getContext('2d');let L=[];
+function rs(){cv.width=innerWidth*devicePixelRatio;cv.height=innerHeight*devicePixelRatio;cx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0)}rs();addEventListener('resize',rs);
+for(let i=0;i<26;i++)L.push({x:Math.random()*innerWidth,y:Math.random()*innerHeight,s:6+Math.random()*14,v:.2+Math.random()*.5,a:Math.random()*6,w:.005+Math.random()*.01,c:Math.random()<.25?'224,184,76':'79,177,115',o:.08+Math.random()*.16});
+(function draw(){cx.clearRect(0,0,innerWidth,innerHeight);
+  L.forEach(l=>{l.y+=l.v;l.a+=l.w;l.x+=Math.sin(l.a)*.6;if(l.y>innerHeight+30){l.y=-30;l.x=Math.random()*innerWidth}
+    cx.save();cx.translate(l.x,l.y);cx.rotate(Math.sin(l.a)*1.2);cx.fillStyle=`rgba(${l.c},${l.o})`;
+    cx.beginPath();cx.moveTo(0,-l.s);cx.quadraticCurveTo(l.s*.7,0,0,l.s);cx.quadraticCurveTo(-l.s*.7,0,0,-l.s);cx.fill();cx.restore()});
+  requestAnimationFrame(draw)})();
+})();
+</script>
+</body>
+</html>
